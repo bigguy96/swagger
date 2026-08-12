@@ -1,6 +1,6 @@
 # Swagger.UI
 
-This .NET 10 Web API demonstrates reusable Swagger UI endpoint search and documentation-only test scenarios across five controllers and 25 CRUD endpoints.
+This .NET 10 Web API demonstrates twelve selectable Swagger UI themes, reusable endpoint search, and documentation-only test scenarios across five controllers and 25 CRUD endpoints.
 
 From the repository root, run:
 

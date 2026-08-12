@@ -11,7 +11,7 @@ A .NET 10 Web API demonstrating reusable Swagger UI endpoint search and document
 - Documentation-only scenarios derived from the OpenAPI contract
 - Minimal and complete JSON request-body examples for POST and PUT operations
 - Example URLs, request headers, expected statuses, and copy controls
-- Native Swagger UI light and dark mode support
+- Twelve persistent UI themes, including accessibility and public-sector palettes
 - Standalone JavaScript and CSS files that can be copied into other applications
 
 ## Requirements
@@ -84,19 +84,36 @@ For example, the minimum Books request is:
 
 See [scenario guidance](docs/SCENARIO-GUIDANCE.md) for configuration and portability details.
 
-## Light and dark modes
+## UI themes
 
-The custom components follow Swagger UI's native lightbulb theme control. Dark-mode rules bind directly to Swagger UI's `html.dark-mode` class, and both palettes include visible focus, hover, border, text, and code-example states.
+The Swagger top bar includes a theme dropdown with twelve choices:
+
+- **Light** — clean neutral documentation palette
+- **Dark** — Swagger's native dark presentation
+- **Ocean** — deep navy surfaces with cyan accents
+- **Forest** — evergreen surfaces with mint accents
+- **Sunset** — warm cream surfaces with coral accents
+- **Lavender** — soft violet surfaces with indigo accents
+- **High Contrast** — black, white, yellow, and cyan for maximum separation
+- **Government Canada** — restrained white, navy, and Canadian red presentation
+- **Arctic** — cool ice-blue surfaces with deep teal accents
+- **Midnight** — near-black navy surfaces with bright blue accents
+- **Low Stimulation** — muted colors, minimal shadows, and reduced motion
+- **Deuteranopia-friendly** — blue, orange, violet, grey, and yellow method colors that do not depend on red/green distinctions
+
+The selected theme is saved in browser storage and restored on the next visit. Search, scenarios, expanded operations, schemas, forms, and authorization dialogs follow the selection.
 
 ## Reuse in another application
 
-Copy these four files into the other application's `wwwroot/swagger-ui` directory:
+Copy these six files into the other application's `wwwroot/swagger-ui` directory:
 
 ```text
 swagger-search.js
 swagger-search.css
 scenario-panel.js
 scenario-panel.css
+theme-selector.js
+theme-selector.css
 ```
 
 Enable static files and register the assets in the Swagger UI configuration:
@@ -109,6 +126,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
     options.InjectStylesheet("/swagger-ui/swagger-search.css");
     options.InjectStylesheet("/swagger-ui/scenario-panel.css");
+    options.InjectStylesheet("/swagger-ui/theme-selector.css");
+    options.InjectJavascript("/swagger-ui/theme-selector.js");
     options.InjectJavascript("/swagger-ui/swagger-search.js");
     options.InjectJavascript("/swagger-ui/scenario-panel.js");
 });

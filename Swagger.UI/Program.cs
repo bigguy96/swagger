@@ -54,10 +54,12 @@ app.UseSwaggerUI(options =>
     options.EnableDeepLinking();
     // Increment the version when these standalone assets change so browsers do
     // not reuse an older cached theme or behavior after deployment.
-    options.InjectStylesheet("/swagger-ui/swagger-search.css?v=2");
-    options.InjectStylesheet("/swagger-ui/scenario-panel.css?v=2");
-    options.InjectJavascript("/swagger-ui/swagger-search.js?v=2");
-    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=2");
+    options.InjectStylesheet("/swagger-ui/swagger-search.css?v=3");
+    options.InjectStylesheet("/swagger-ui/scenario-panel.css?v=3");
+    options.InjectStylesheet("/swagger-ui/theme-selector.css?v=2");
+    options.InjectJavascript("/swagger-ui/theme-selector.js?v=2");
+    options.InjectJavascript("/swagger-ui/swagger-search.js?v=3");
+    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=3");
 });
 
 app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();

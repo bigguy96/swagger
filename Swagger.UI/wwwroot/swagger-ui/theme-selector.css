@@ -1,0 +1,161 @@
+/*
+ * Twelve-theme palette layer for Swagger UI. Each theme defines semantic color
+ * variables; the shared rules below apply them to Swagger, search, and scenarios.
+ */
+
+/* Theme picker in Swagger's top bar --------------------------------------- */
+.swagger-ui .swagger-theme-selector { display: flex; align-items: center; gap: .55rem; margin-left: 1rem; }
+.swagger-ui .swagger-theme-selector label { color: #f4f7f8; font-size: .75rem; font-weight: 700; }
+.swagger-ui .swagger-theme-selector select { min-width: 145px; min-height: 32px; padding: .35rem 2rem .35rem .55rem; color: #172536; background-color: #fff; border: 1px solid #aab7c2; border-radius: 4px; font: inherit; font-size: .76rem; font-weight: 650; }
+.swagger-ui .swagger-theme-selector select:focus-visible { outline: 3px solid #ffbf47; outline-offset: 2px; }
+html.dark-mode .swagger-ui .swagger-theme-selector select { color: #f0f1f1; background-color: #1c2022; border-color: #b7bcbf; }
+
+/* Five additional palettes ----------------------------------------------- */
+html[data-api-theme="ocean"] {
+    --theme-page: #071c2c; --theme-surface: #0d2a3f; --theme-surface-2: #123a54;
+    --theme-text: #eefaff; --theme-muted: #b8d9e8; --theme-border: #5486a0;
+    --theme-accent: #35c4dc; --theme-accent-text: #041a24; --theme-focus: #ffd166;
+    --theme-code: #041722;
+}
+html[data-api-theme="forest"] {
+    --theme-page: #10251c; --theme-surface: #183629; --theme-surface-2: #224b39;
+    --theme-text: #f1fbf5; --theme-muted: #c2ddcc; --theme-border: #6c997e;
+    --theme-accent: #77d69d; --theme-accent-text: #0c2718; --theme-focus: #ffd166;
+    --theme-code: #0b1e16;
+}
+html[data-api-theme="sunset"] {
+    --theme-page: #fff6eb; --theme-surface: #fffdf9; --theme-surface-2: #fbe6d4;
+    --theme-text: #3c241d; --theme-muted: #704b3e; --theme-border: #b98268;
+    --theme-accent: #c94f36; --theme-accent-text: #fff; --theme-focus: #174f78;
+    --theme-code: #33231f;
+}
+html[data-api-theme="lavender"] {
+    --theme-page: #f6f2ff; --theme-surface: #fff; --theme-surface-2: #ece3fa;
+    --theme-text: #302347; --theme-muted: #625275; --theme-border: #9d86b5;
+    --theme-accent: #6842a0; --theme-accent-text: #fff; --theme-focus: #bd6200;
+    --theme-code: #2c2438;
+}
+html[data-api-theme="high-contrast"] {
+    --theme-page: #000; --theme-surface: #000; --theme-surface-2: #161616;
+    --theme-text: #fff; --theme-muted: #fff; --theme-border: #fff;
+    --theme-accent: #ffeb3b; --theme-accent-text: #000; --theme-focus: #00ffff;
+    --theme-code: #000;
+}
+html[data-api-theme="government-canada"] {
+    --theme-page: #f5f5f5; --theme-surface: #fff; --theme-surface-2: #e9ecef;
+    --theme-text: #243850; --theme-muted: #4b5f72; --theme-border: #8795a1;
+    --theme-accent: #b91c2e; --theme-accent-text: #fff; --theme-focus: #1b6ca8;
+    --theme-code: #202b35;
+}
+html[data-api-theme="arctic"] {
+    --theme-page: #eef8fa; --theme-surface: #fff; --theme-surface-2: #dceff2;
+    --theme-text: #183b45; --theme-muted: #3f626c; --theme-border: #7799a2;
+    --theme-accent: #087f8c; --theme-accent-text: #fff; --theme-focus: #a84700;
+    --theme-code: #18343c;
+}
+html[data-api-theme="midnight"] {
+    --theme-page: #080f1e; --theme-surface: #111c30; --theme-surface-2: #192941;
+    --theme-text: #f2f6ff; --theme-muted: #bac8df; --theme-border: #60779b;
+    --theme-accent: #66a9ff; --theme-accent-text: #06101f; --theme-focus: #ffd166;
+    --theme-code: #050a14;
+}
+html[data-api-theme="low-stimulation"] {
+    --theme-page: #f1f0ec; --theme-surface: #f8f7f3; --theme-surface-2: #e7e5df;
+    --theme-text: #343a3a; --theme-muted: #596261; --theme-border: #8c9693;
+    --theme-accent: #496c68; --theme-accent-text: #fff; --theme-focus: #7b5922;
+    --theme-code: #303635;
+}
+html[data-api-theme="deuteranopia"] {
+    --theme-page: #f5f7fa; --theme-surface: #fff; --theme-surface-2: #e6edf5;
+    --theme-text: #192d44; --theme-muted: #465e75; --theme-border: #7a8fa3;
+    --theme-accent: #1769aa; --theme-accent-text: #fff; --theme-focus: #a54b00;
+    --theme-code: #1d2d3d;
+}
+
+/* Apply a custom palette to the native Swagger canvas -------------------- */
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) { background: var(--theme-page); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) body,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui { color: var(--theme-text); background: var(--theme-page); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .topbar { background: var(--theme-surface-2); border-bottom: 2px solid var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .swagger-theme-selector select { color: var(--theme-accent-text); background-color: var(--theme-accent); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .info .title,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .info h1,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .info h2,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .info p,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .opblock-tag,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .opblock-tag small,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .models h4 { color: var(--theme-text); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .info a { color: var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .opblock-tag { border-bottom-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .opblock-tag svg { fill: var(--theme-text); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .models { background: var(--theme-surface); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .model-container { background: var(--theme-surface-2); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .model,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .model-title { color: var(--theme-text); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .scheme-container,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .opblock .opblock-section-header { color: var(--theme-text); background: var(--theme-surface); border-color: var(--theme-border); box-shadow: none; }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui :is(label, table thead tr td, table thead tr th, .parameter__name, .parameter__type, .response-col_status) { color: var(--theme-text); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui :is(input, select, textarea) { color: var(--theme-text); background-color: var(--theme-surface); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .dialog-ux .modal-ux { color: var(--theme-text); background: var(--theme-surface); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .dialog-ux .modal-ux :is(h2, h3, h4, h5, label, p) { color: var(--theme-text); }
+
+/* Search and scenario components consume the same semantic palette ------- */
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-endpoint-search,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card { color: var(--theme-text); background: var(--theme-surface); border-color: var(--theme-border); border-top-color: var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-heading label,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-result,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-result code,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-panel-header strong,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card > summary,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card-content dd { color: var(--theme-text); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-heading p,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-shortcut,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) #endpoint-search-status,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-description,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-panel-header p,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-purpose,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card-content dt { color: var(--theme-muted); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .swagger-endpoint-search .endpoint-search-control input { color: var(--theme-text); color-scheme: inherit; background: var(--theme-page); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .swagger-ui .swagger-endpoint-search .endpoint-search-control input::placeholder { color: var(--theme-muted); opacity: 1; }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-control > span { color: var(--theme-muted); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-result,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card-content { background: var(--theme-surface-2); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-search-result:hover,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-card > summary:hover { background: color-mix(in srgb, var(--theme-accent) 18%, var(--theme-surface)); border-color: var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .endpoint-tag,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-category,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-status { color: var(--theme-accent-text); background: var(--theme-accent); border-color: var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-panel { color: var(--theme-text); background: var(--theme-page); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-example,
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-example > div { color: var(--theme-text); background: var(--theme-surface-2); border-color: var(--theme-border); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) .scenario-example pre { background: var(--theme-code) !important; }
+
+/* Custom-theme buttons and focus indicators ------------------------------ */
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) :is(.scenario-toggle, .scenario-visibility-toggle, .scenario-panel-close, .scenario-copy, .endpoint-search-control button) { color: var(--theme-accent-text); background: var(--theme-accent); border-color: var(--theme-accent); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) :is(.scenario-toggle, .scenario-visibility-toggle, .scenario-panel-close, .scenario-copy, .endpoint-search-control button):hover { filter: brightness(.88); }
+html[data-api-theme]:not([data-api-theme="light"]):not([data-api-theme="dark"]) :is(button, input, select, summary):focus-visible { outline-color: var(--theme-focus) !important; }
+
+/* Theme-specific behavior ------------------------------------------------ */
+/* Reduce decorative intensity and motion for long, low-distraction sessions. */
+html[data-api-theme="low-stimulation"] .swagger-endpoint-search,
+html[data-api-theme="low-stimulation"] .swagger-ui :is(.opblock, .models, .scheme-container) { box-shadow: none !important; }
+html[data-api-theme="low-stimulation"] *,
+html[data-api-theme="low-stimulation"] *::before,
+html[data-api-theme="low-stimulation"] *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+
+/* Do not use red versus green as the only distinction between HTTP methods. */
+html[data-api-theme="deuteranopia"] .swagger-ui .opblock.opblock-get .opblock-summary-method,
+html[data-api-theme="deuteranopia"] .method-get { color: #fff; background: #1769aa; }
+html[data-api-theme="deuteranopia"] .swagger-ui .opblock.opblock-post .opblock-summary-method,
+html[data-api-theme="deuteranopia"] .method-post { color: #17120a; background: #e69f00; }
+html[data-api-theme="deuteranopia"] .swagger-ui .opblock.opblock-put .opblock-summary-method,
+html[data-api-theme="deuteranopia"] .method-put { color: #fff; background: #6f4c9b; }
+html[data-api-theme="deuteranopia"] .swagger-ui .opblock.opblock-delete .opblock-summary-method,
+html[data-api-theme="deuteranopia"] .method-delete { color: #fff; background: #3f566b; }
+html[data-api-theme="deuteranopia"] .swagger-ui .opblock.opblock-patch .opblock-summary-method,
+html[data-api-theme="deuteranopia"] .method-patch { color: #17120a; background: #f0e442; }
+
+@media (max-width: 700px) {
+    .swagger-ui .swagger-theme-selector { width: 100%; margin: .6rem 0 0; }
+    .swagger-ui .swagger-theme-selector select { flex: 1; }
+}
