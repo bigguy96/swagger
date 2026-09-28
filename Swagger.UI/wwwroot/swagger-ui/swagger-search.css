@@ -4,6 +4,7 @@
  */
 
 /* Panel layout ------------------------------------------------------------- */
+/* The search panel spans the Swagger content area without changing Swagger's native layout. */
 .swagger-endpoint-search {
     box-sizing: border-box;
     width: 100%;
@@ -22,6 +23,7 @@
 .swagger-endpoint-search[data-awaiting-placement="true"] { display: none; }
 
 /* Heading and input -------------------------------------------------------- */
+/* Strong contrast and visible focus styles keep the search control keyboard accessible. */
 .endpoint-search-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: .7rem; }
 .endpoint-search-heading label { display: block; color: #172536; font-size: 1rem; font-weight: 750; }
 .endpoint-search-heading p { margin: .2rem 0 0; color: #4f6070; font-size: .78rem; }
@@ -37,6 +39,7 @@
 #endpoint-search-status { margin: .6rem 0 0; color: #415668; font-size: .76rem; font-weight: 650; }
 
 /* Matching endpoint cards ------------------------------------------------- */
+/* Search results present the HTTP method, path, summary, and tag in a compact card. */
 .endpoint-search-results { display: grid; gap: .45rem; margin-top: .75rem; }
 .endpoint-search-result { display: grid; grid-template-columns: 68px minmax(210px, 1.2fr) minmax(180px, 1fr) auto; align-items: center; gap: .75rem; width: 100%; padding: .65rem; color: #172536; text-align: left; background: #f8fafb; border: 1px solid #c4d0da; border-radius: 4px; cursor: pointer; }
 .endpoint-search-result:hover { background: #edf5fa; border-color: #6689a6; }
@@ -48,6 +51,7 @@
 .endpoint-tag { padding: .2rem .4rem; color: #294b68; background: #e2edf4; border-radius: 3px; font-size: .65rem; font-weight: 700; }
 
 /* Dark palette. Match Swagger's native .dark-mode class or a configured data-theme. */
+/* Theme selectors are scoped to the custom search panel so Swagger's own styles remain unchanged. */
 html:is([data-theme="dark"], .dark-mode) .swagger-endpoint-search { color: #edf3f8; background: #172331; border-color: #536779; border-top-color: #78b7e6; box-shadow: 0 3px 12px rgb(0 0 0 / 35%); }
 html:is([data-theme="dark"], .dark-mode) .endpoint-search-heading label { color: #edf3f8; }
 html:is([data-theme="dark"], .dark-mode) .endpoint-search-heading p,
@@ -65,6 +69,7 @@ html:is([data-theme="dark"], .dark-mode) .endpoint-description { color: #bfccd7;
 html:is([data-theme="dark"], .dark-mode) .endpoint-tag { color: #d7eafa; background: #29455b; }
 
 /* Compact result layout for tablets and phones. */
+/* Stack result details when the available width cannot support the desktop grid. */
 @media (max-width: 800px) {
     .swagger-endpoint-search { width: 100%; margin: 1rem 0; }
     .endpoint-search-result { grid-template-columns: 60px minmax(0, 1fr); }

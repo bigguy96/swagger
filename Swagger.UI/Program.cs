@@ -79,7 +79,7 @@ app.UseSwaggerUI(options =>
     options.InjectStylesheet("/swagger-ui/swagger-search.css?v=2");
     options.InjectStylesheet("/swagger-ui/scenario-panel.css?v=2");
     options.InjectJavascript("/swagger-ui/swagger-search.js?v=2");
-    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=3");
+    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=4");
 });
 
 app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();

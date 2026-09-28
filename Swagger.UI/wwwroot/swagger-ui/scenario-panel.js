@@ -22,10 +22,12 @@
 
     // OpenAPI lookup helpers ---------------------------------------------------
 
+    // Build the stable key used to associate an OpenAPI operation with its Swagger DOM node.
     function operationKey(method, path) {
         return `${method.toUpperCase()}:${path.trim()}`;
     }
 
+    // Resolve local OpenAPI references such as #/components/schemas/Book.
     function resolveReference(node) {
         if (!node || !node.$ref || !node.$ref.startsWith("#/")) {
             return node;
@@ -37,6 +39,7 @@
         }, documentModel);
     }
 
+    // Collect required and optional properties from an object schema, including allOf parts.
     function collectSchemaProperties(schema, requiredNames, optionalNames, prefix, visited) {
         schema = resolveReference(schema);
         if (!schema || visited.has(schema)) {
@@ -55,6 +58,7 @@
         });
     }
 
+    // Summarize parameters and request-body fields for display in a scenario card.
     function describeInputs(pathItem, operation) {
         const required = [];
         const optional = [];
@@ -93,6 +97,7 @@
     // Example generation ------------------------------------------------------
     // Recursively converts an OpenAPI schema into deterministic example data.
     // includeOptional=false produces a minimal object containing required fields.
+    // A recursion guard prevents circular schema references from producing infinite data.
     function exampleValue(schemaNode, includeOptional, depth, references) {
         if (!schemaNode || depth > 7) return null;
         if (schemaNode.example !== undefined) return schemaNode.example;
@@ -151,11 +156,13 @@
         }
     }
 
+    // Generate a representative value for a parameter schema.
     function parameterExample(parameter) {
         if (parameter.example !== undefined) return parameter.example;
         return exampleValue(resolveReference(parameter.schema) || { type: "string" }, true, 0, new Set());
     }
 
+    // Identify empty objects and arrays so required request bodies can be represented usefully.
     function isStructurallyEmpty(value) {
         if (value === null || value === undefined) return true;
         if (Array.isArray(value)) return value.length === 0 || value.every(isStructurallyEmpty);
@@ -163,6 +170,7 @@
         return false;
     }
 
+    // Keep generated examples compact while retaining a representative set of fields.
     function limitRepresentativeProperties(value, limit, depth) {
         if (depth > 6) return value;
         if (Array.isArray(value)) {
@@ -178,6 +186,7 @@
         }, {});
     }
 
+    // Build a URL, headers, and JSON body for a minimum or complete request example.
     function buildRequestExample(path, pathItem, operation, includeOptional) {
         const parameters = [...(pathItem.parameters || []), ...(operation.parameters || [])]
             .map(resolveReference)
@@ -236,14 +245,17 @@
     // Scenario definitions ----------------------------------------------------
     // Derive useful success, validation, security, and resource-state scenarios
     // from the contract without changing how the API itself responds.
+    // Select the first documented response status from a preferred list.
     function firstStatus(responses, candidates) {
         return candidates.find(function (status) { return responses?.[status]; });
     }
 
+    // Create the normalized data object used to render a scenario card.
     function makeScenario(id, category, title, purpose, expectedStatus, inputs, guidance) {
         return { id, category, title, purpose, expectedStatus, inputs, guidance };
     }
 
+    // Derive scenarios from documented inputs, responses, constraints, and lifecycle metadata.
     function buildScenarios(path, pathItem, operation) {
         const inputs = describeInputs(pathItem, operation);
         const responses = operation.responses || {};
@@ -338,6 +350,7 @@
 
     // DOM and clipboard helpers -----------------------------------------------
 
+    // Create a text-safe DOM element for the custom panel.
     function textElement(tagName, className, text) {
         const element = document.createElement(tagName);
         element.className = className;
@@ -345,10 +358,12 @@
         return element;
     }
 
+    // Format optional arrays for the scenario facts list.
     function valueOrNone(values) {
         return values.length ? values.join(", ") : "None declared";
     }
 
+    // Copy code and examples using the Clipboard API with a legacy fallback.
     async function copyToClipboard(value) {
         if (navigator.clipboard?.writeText) {
             await navigator.clipboard.writeText(value);
@@ -367,6 +382,7 @@
         if (!copied) throw new Error("Clipboard copy was rejected.");
     }
 
+    // Render a labeled, copyable code or data example.
     function createExampleBlock(label, value, language) {
         const block = document.createElement("section");
         block.className = "scenario-example";
@@ -391,6 +407,52 @@
         return block;
     }
 
+    // Convert an OpenAPI example property name into a readable C# anonymous-object name.
+    function toCSharpIdentifier(name) {
+        const identifier = name
+            .replace(/[^a-zA-Z0-9]+(.)?/g, function (_, character) { return character ? character.toUpperCase() : ""; })
+            .replace(/^(.)/, function (_, character) { return character.toUpperCase(); });
+        const reservedWords = new Set([
+            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+            "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else",
+            "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for",
+            "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock",
+            "long", "namespace", "new", "null", "object", "operator", "out", "override", "params",
+            "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short",
+            "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true",
+            "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual",
+            "void", "volatile", "while"
+        ]);
+        return reservedWords.has(identifier) ? `@${identifier}` : identifier || "Value";
+    }
+
+    // Convert generated JavaScript values into valid C# literals for JsonContent.Create.
+    function toCSharpLiteral(value, depth) {
+        depth = depth || 0;
+        const indentation = "    ".repeat(depth);
+        const childIndentation = "    ".repeat(depth + 1);
+
+        if (value === null) return "null";
+        if (typeof value === "boolean") return value ? "true" : "false";
+        if (typeof value === "number") return Number.isInteger(value) ? String(value) : `${value}m`;
+        if (typeof value === "string") return JSON.stringify(value);
+
+        if (Array.isArray(value)) {
+            const items = value.map(item => `${childIndentation}${toCSharpLiteral(item, depth + 1)}`).join(",\n");
+            return items ? `new object[]\n${indentation}{\n${items}\n${indentation}}` : "Array.Empty<object>()";
+        }
+
+        if (typeof value === "object") {
+            const properties = Object.entries(value)
+                .map(([name, item]) => `${childIndentation}${toCSharpIdentifier(name)} = ${toCSharpLiteral(item, depth + 1)}`)
+                .join(",\n");
+            return `new\n${indentation}{\n${properties}\n${indentation}}`;
+        }
+
+        return "null";
+    }
+
+    // Generate copyable examples for common client technologies from one request model.
     function createCodeSamples(example, method) {
         const url = `${config.codeSampleBaseUrl}${example.url}`;
         const headers = example.headers || {};
@@ -403,7 +465,7 @@
         const csharpHeaders = headerEntries.map(function ([name, value]) {
             return `request.Headers.TryAddWithoutValidation(${JSON.stringify(name)}, ${JSON.stringify(value)});`;
         }).join("\n");
-        const csharpBody = body === undefined ? "" : `\nrequest.Content = new StringContent(${JSON.stringify(body)}, Encoding.UTF8, "application/json");`;
+        const csharpBody = example.body === undefined ? "" : `\nrequest.Content = JsonContent.Create(${toCSharpLiteral(example.body)});`;
         const javascriptHeaders = Object.assign({}, headers, body === undefined ? {} : { "Content-Type": "application/json" });
         const pythonHeaders = Object.assign({}, headers, body === undefined ? {} : { "Content-Type": "application/json" });
         const javascriptBody = body === undefined ? "" : `\n  body: JSON.stringify(${body}),`;
@@ -411,12 +473,13 @@
 
         return [
             ["cURL", `curl -X ${method} ${JSON.stringify(url)} \\\n${curlHeaders}${curlBody}`, "bash"],
-            ["C# · HttpClient", `using System.Net.Http;\nusing System.Text;\n\nusing var client = new HttpClient();\nusing var request = new HttpRequestMessage(HttpMethod.${method[0] + method.slice(1).toLowerCase()}, ${JSON.stringify(url)});\n${csharpHeaders}${csharpBody}\nusing var response = await client.SendAsync(request);\nresponse.EnsureSuccessStatusCode();`, "csharp"],
+            ["C# · HttpClient", `using System.Net.Http;\nusing System.Net.Http.Json;\n\nusing var client = new HttpClient();\nusing var request = new HttpRequestMessage(HttpMethod.${method[0] + method.slice(1).toLowerCase()}, ${JSON.stringify(url)});\n${csharpHeaders}${csharpBody}\nusing var response = await client.SendAsync(request);\nresponse.EnsureSuccessStatusCode();`, "csharp"],
             ["JavaScript · fetch", `const response = await fetch(${JSON.stringify(url)}, {\n  method: ${JSON.stringify(method)},\n  headers: ${JSON.stringify(javascriptHeaders, null, 2)}${javascriptBody}\n});\n\nif (!response.ok) throw new Error(await response.text());\nconst result = await response.json();`, "javascript"],
             ["Python · requests", `import requests\n\nresponse = requests.request(\n    ${JSON.stringify(method)},\n    ${JSON.stringify(url)},\n    headers=${JSON.stringify(pythonHeaders, null, 2).replace(/\n/g, "\n    ")}${pythonBody}\n)\nresponse.raise_for_status()\nresult = response.json()`, "python"]
         ];
     }
 
+    // Render one expandable scenario, including inputs, request data, and code samples.
     function createScenarioCard(definition, method) {
         const details = document.createElement("details");
         details.className = "scenario-card";
@@ -464,6 +527,7 @@
         return details;
     }
 
+    // Create the operation-level panel and its close control.
     function createPanel(definition) {
         const panel = document.createElement("section");
         panel.className = "scenario-panel";

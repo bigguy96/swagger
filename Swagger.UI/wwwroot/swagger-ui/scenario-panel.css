@@ -4,6 +4,7 @@
  */
 
 /* Shared interactive controls -------------------------------------------- */
+/* Shared button geometry and focus treatment keeps the custom controls consistent. */
 .scenario-toggle,
 .scenario-visibility-toggle,
 .scenario-panel-close {
@@ -63,6 +64,7 @@
 }
 
 /* Operation-level scenario panel ----------------------------------------- */
+/* The panel is inserted beneath a Swagger operation and remains hidden until opened. */
 .scenario-panel {
     padding: 1rem;
     color: #172536;
@@ -101,6 +103,7 @@
 .scenario-list { display: grid; gap: .55rem; }
 
 /* Expandable scenario cards ---------------------------------------------- */
+/* Native details/summary elements provide keyboard-accessible expansion. */
 .scenario-card {
     overflow: hidden;
     background: #fff;
@@ -165,6 +168,7 @@ html:is([data-theme="dark"], .dark-mode) .scenario-code-samples-heading { color:
 .scenario-card-content dd { margin: 0; color: #263b4d; }
 
 /* Copyable URL, header, and JSON examples -------------------------------- */
+/* Examples use a dark code surface to distinguish copied content from guidance text. */
 .scenario-example {
     margin-top: .75rem;
     overflow: hidden;

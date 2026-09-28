@@ -11,6 +11,7 @@
     let endpoints = [];
     let searchElement;
 
+    // Create small text-only elements to avoid interpreting endpoint metadata as HTML.
     function textElement(tagName, className, text) {
         const element = document.createElement(tagName);
         element.className = className;
@@ -18,6 +19,7 @@
         return element;
     }
 
+    // Determine whether a rendered color is dark enough to require the dark palette.
     // Creates the accessible search interface once. It is initially hidden until
     // Swagger has rendered the controller groups and placeSearch can position it.
     function createSearch() {
@@ -66,6 +68,7 @@
         document.dispatchEvent(new CustomEvent("swagger-search-ready"));
     }
 
+    // Render matching endpoint paths and keep the result count accessible to screen readers.
     // Swagger renders asynchronously. Insert the search immediately before the
     // first operation group so it follows the API description and shares its width.
     function placeSearch() {
@@ -78,6 +81,7 @@
         delete searchElement.dataset.awaitingPlacement;
     }
 
+    // Initialize the search UI, load the OpenAPI document, and observe Swagger UI updates.
     // Convert a computed RGB background into a light/dark decision using relative
     // luminance. Transparent colors return null so another page element can be tried.
     function isDarkColor(value) {
