@@ -16,6 +16,25 @@ builder.Services.AddSwaggerGen(options =>
         Description = "A small .NET 10 API demonstrating reusable Swagger endpoint search and scenario guidance."
     });
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+    options.AddSecurityDefinition("api-key", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = "api-key",
+        Description = "Enter the API key used to call the endpoint."
+    });
+    options.AddSecurityDefinition("app-jwt", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = "app-jwt",
+        Description = "Enter the application JWT used to call the endpoint."
+    });
+    options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("api-key")] = [],
+        [new OpenApiSecuritySchemeReference("app-jwt")] = []
+    });
 });
 
 builder.Services.AddSingleton(new CrudStore<Book>(
@@ -60,7 +79,7 @@ app.UseSwaggerUI(options =>
     options.InjectStylesheet("/swagger-ui/swagger-search.css?v=2");
     options.InjectStylesheet("/swagger-ui/scenario-panel.css?v=2");
     options.InjectJavascript("/swagger-ui/swagger-search.js?v=2");
-    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=2");
+    options.InjectJavascript("/swagger-ui/scenario-panel.js?v=3");
 });
 
 app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();

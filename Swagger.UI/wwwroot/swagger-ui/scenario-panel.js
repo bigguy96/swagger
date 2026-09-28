@@ -8,7 +8,10 @@
         storageKey: "api-explorer-scenario-buttons-visible",
         initiallyVisible: true,
         maximumScenariosPerOperation: 8,
-        minimumBodyPropertyCount: 5
+        minimumBodyPropertyCount: 5,
+        codeSampleBaseUrl: "https://api.example.com",
+        apiKeyPlaceholder: "YOUR_API_KEY",
+        appJwtPlaceholder: "YOUR_APP_JWT"
     };
 
     const config = Object.assign({}, defaultConfig, window.MockScenarioPanelConfig || {});
@@ -219,7 +222,10 @@
 
         return {
             url: exampleUrl,
-            headers: Object.keys(headers).length ? headers : undefined,
+            headers: Object.assign({
+                "api-key": config.apiKeyPlaceholder,
+                "app-jwt": config.appJwtPlaceholder
+            }, headers),
             body: body,
             mediaType: jsonEntry?.[0],
             bodyIsRepresentative: bodyIsRepresentative,
@@ -385,7 +391,33 @@
         return block;
     }
 
-    function createScenarioCard(definition) {
+    function createCodeSamples(example, method) {
+        const url = `${config.codeSampleBaseUrl}${example.url}`;
+        const headers = example.headers || {};
+        const body = example.body === undefined ? undefined : JSON.stringify(example.body, null, 2);
+        const headerEntries = Object.entries(headers);
+        const curlHeaders = headerEntries.map(function ([name, value]) {
+            return `  -H ${JSON.stringify(`${name}: ${value}`)}`;
+        }).join(" \\\n");
+        const curlBody = body === undefined ? "" : ` \\\n  -H "Content-Type: application/json" \\\n  --data ${JSON.stringify(body)}`;
+        const csharpHeaders = headerEntries.map(function ([name, value]) {
+            return `request.Headers.TryAddWithoutValidation(${JSON.stringify(name)}, ${JSON.stringify(value)});`;
+        }).join("\n");
+        const csharpBody = body === undefined ? "" : `\nrequest.Content = new StringContent(${JSON.stringify(body)}, Encoding.UTF8, "application/json");`;
+        const javascriptHeaders = Object.assign({}, headers, body === undefined ? {} : { "Content-Type": "application/json" });
+        const pythonHeaders = Object.assign({}, headers, body === undefined ? {} : { "Content-Type": "application/json" });
+        const javascriptBody = body === undefined ? "" : `\n  body: JSON.stringify(${body}),`;
+        const pythonBody = body === undefined ? "" : `,\n    data=${JSON.stringify(body)}`;
+
+        return [
+            ["cURL", `curl -X ${method} ${JSON.stringify(url)} \\\n${curlHeaders}${curlBody}`, "bash"],
+            ["C# · HttpClient", `using System.Net.Http;\nusing System.Text;\n\nusing var client = new HttpClient();\nusing var request = new HttpRequestMessage(HttpMethod.${method[0] + method.slice(1).toLowerCase()}, ${JSON.stringify(url)});\n${csharpHeaders}${csharpBody}\nusing var response = await client.SendAsync(request);\nresponse.EnsureSuccessStatusCode();`, "csharp"],
+            ["JavaScript · fetch", `const response = await fetch(${JSON.stringify(url)}, {\n  method: ${JSON.stringify(method)},\n  headers: ${JSON.stringify(javascriptHeaders, null, 2)}${javascriptBody}\n});\n\nif (!response.ok) throw new Error(await response.text());\nconst result = await response.json();`, "javascript"],
+            ["Python · requests", `import requests\n\nresponse = requests.request(\n    ${JSON.stringify(method)},\n    ${JSON.stringify(url)},\n    headers=${JSON.stringify(pythonHeaders, null, 2).replace(/\n/g, "\n    ")}${pythonBody}\n)\nresponse.raise_for_status()\nresult = response.json()`, "python"]
+        ];
+    }
+
+    function createScenarioCard(definition, method) {
         const details = document.createElement("details");
         details.className = "scenario-card";
         const summary = document.createElement("summary");
@@ -422,6 +454,12 @@
             const label = definition.example.mediaType ? `${prefix} · ${definition.example.mediaType}` : prefix;
             content.append(createExampleBlock(label, JSON.stringify(definition.example.body, null, 2), "json"));
         }
+        if (definition.example) {
+            content.append(textElement("h4", "scenario-code-samples-heading", "Code samples"));
+            createCodeSamples(definition.example, method).forEach(function ([label, value, language]) {
+                content.append(createExampleBlock(label, value, language));
+            });
+        }
         details.append(summary, content);
         return details;
     }
@@ -440,7 +478,7 @@
         header.append(heading, close);
         const list = document.createElement("div");
         list.className = "scenario-list";
-        definition.scenarios.forEach(function (item) { list.append(createScenarioCard(item)); });
+        definition.scenarios.forEach(function (item) { list.append(createScenarioCard(item, definition.method)); });
         panel.append(header, list);
         return { panel, close };
     }

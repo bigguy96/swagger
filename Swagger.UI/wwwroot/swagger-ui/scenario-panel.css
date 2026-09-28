@@ -121,7 +121,7 @@
     list-style: none;
 }
 
-.scenario-card > summary::-webkit-details-marker { display: none; }
+.scenario-card > summary::marker { content: ""; }
 .scenario-card > summary::after { content: "+"; position: absolute; right: 1rem; color: #3f5367; font-size: 1rem; font-weight: 800; }
 .scenario-card[open] > summary::after { content: "\2212"; }
 .scenario-card > summary:hover { background: #edf5fa; }
@@ -147,6 +147,7 @@
 
 .scenario-card-content { padding: .7rem; background: #fbfdfe; border-top: 1px solid #ccd7e0; }
 .scenario-purpose { margin: 0 0 .65rem; color: #334e63; font-size: .75rem; }
+.scenario-code-samples-heading { margin: 1rem 0 .45rem; color: #263b4d; font-size: .8rem; }
 
 .scenario-card-content dl {
     display: grid;
@@ -155,6 +156,10 @@
     margin: 0;
     font-size: .72rem;
 }
+
+.scenario-code-samples-heading + .scenario-example { margin-top: 0; }
+
+html:is([data-theme="dark"], .dark-mode) .scenario-code-samples-heading { color: #edf3f8; }
 
 .scenario-card-content dt { color: #3e5669; font-weight: 800; }
 .scenario-card-content dd { margin: 0; color: #263b4d; }
