@@ -58,6 +58,8 @@ app-jwt: YOUR_APP_JWT
 
 Replace the placeholder values before using a sample against an API that requires authentication.
 
+Each endpoint also includes a **Usage and code examples** link. The link opens a dedicated usage page in a new tab, loads the selected operation from the OpenAPI document, and displays its request details and generated examples.
+
 ### Authentication documentation
 
 Swagger exposes `api-key` and `app-jwt` as API-key security schemes in the **Authorize** dialog. Values entered there are applied to Swagger UI's **Try it out** requests.

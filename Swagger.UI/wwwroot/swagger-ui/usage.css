@@ -1,0 +1,54 @@
+* { box-sizing: border-box; }
+
+:root {
+    color: #172536;
+    background: #f5f9fc;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body { margin: 0; }
+
+.usage-page {
+    width: min(1100px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.usage-page a { color: #1769aa; font-weight: 700; }
+.usage-header { margin: 2rem 0 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #b7c7d5; }
+.eyebrow { margin: 0 0 .35rem; color: #2b5d89; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 2.25rem); }
+#page-description { margin: .6rem 0 0; color: #4c6071; }
+#page-status { padding: .8rem 1rem; color: #334e63; background: #edf5fa; border-left: 4px solid #2b5d89; }
+
+.usage-section { margin-top: 1.25rem; padding: 1rem; background: #fff; border: 1px solid #b8c7d3; border-radius: 5px; }
+.usage-section h2 { margin: 0 0 .8rem; font-size: 1.05rem; }
+.usage-facts { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: .45rem .8rem; margin: 0; font-size: .9rem; }
+.usage-facts dt { color: #3e5669; font-weight: 800; }
+.usage-facts dd { margin: 0; overflow-wrap: anywhere; }
+
+.usage-code { margin-top: 1rem; overflow: hidden; border: 1px solid #aebdca; border-radius: 5px; }
+.usage-code-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .5rem .7rem; color: #263b4d; background: #edf3f7; border-bottom: 1px solid #aebdca; font-size: .8rem; font-weight: 800; }
+.usage-copy { padding: .25rem .55rem; color: #244f70; background: #fff; border: 1px solid #6d8ca5; border-radius: 3px; cursor: pointer; font: inherit; font-size: .75rem; font-weight: 800; }
+.usage-copy:hover { color: #fff; background: #2b5d89; }
+.usage-copy:focus-visible, .usage-page a:focus-visible { outline: 3px solid #ffbf47; outline-offset: 2px; }
+pre { max-height: 420px; margin: 0; padding: 1rem; overflow: auto; color: #f3f7fa; background: #202a33; font: .82rem/1.55 Consolas, "Courier New", monospace; white-space: pre-wrap; word-break: break-word; }
+
+@media (max-width: 650px) {
+    .usage-page { width: min(100% - 1rem, 1100px); padding-top: 1rem; }
+    .usage-facts { grid-template-columns: 1fr; gap: .15rem; }
+    .usage-facts dd { margin-bottom: .55rem; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root { color: #edf3f8; background: #172331; }
+    .usage-page a { color: #9acdf1; }
+    .usage-header { border-color: #536779; }
+    .eyebrow { color: #78b7e6; }
+    #page-description, .usage-facts dt { color: #bdcad5; }
+    #page-status { color: #d9e8f4; background: #223548; border-color: #78b7e6; }
+    .usage-section { background: #101c28; border-color: #536779; }
+    .usage-code { border-color: #536779; }
+    .usage-code-header { color: #d9e8f4; background: #223548; border-color: #536779; }
+    .usage-copy { color: #d9e8f4; background: #172331; border-color: #6f879b; }
+}

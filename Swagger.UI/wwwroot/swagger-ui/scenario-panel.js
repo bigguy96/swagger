@@ -11,7 +11,9 @@
         minimumBodyPropertyCount: 5,
         codeSampleBaseUrl: "https://api.example.com",
         apiKeyPlaceholder: "YOUR_API_KEY",
-        appJwtPlaceholder: "YOUR_APP_JWT"
+        appJwtPlaceholder: "YOUR_APP_JWT",
+        usageQueryParameter: "endpoint",
+        usageDocumentationUrl: "/swagger-ui/usage.html"
     };
 
     const config = Object.assign({}, defaultConfig, window.MockScenarioPanelConfig || {});
@@ -527,6 +529,18 @@
         return details;
     }
 
+    // Create a safe new-tab link to the dedicated usage page for this operation.
+    function createUsageLink(definition) {
+        const link = textElement("a", "scenario-usage-link", "Usage and code examples ↗");
+        const url = new URL(config.usageDocumentationUrl, window.location.origin);
+        url.searchParams.set(config.usageQueryParameter, operationKey(definition.method, definition.path));
+        link.href = url.toString();
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.title = "Open usage guidance and code examples in a new tab";
+        return link;
+    }
+
     // Create the operation-level panel and its close control.
     function createPanel(definition) {
         const panel = document.createElement("section");
@@ -572,6 +586,9 @@
             button.textContent = open ? "Hide scenarios" : `Scenarios ${definition.scenarios.length}`;
         }
 
+        const requestedOperation = new URLSearchParams(window.location.search).get(config.usageQueryParameter);
+        const shouldOpenFromLink = requestedOperation === operationKey(definition.method, definition.path);
+
         button.addEventListener("click", function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -580,8 +597,13 @@
         elements.close.addEventListener("click", function () { setOpen(false); button.focus(); });
         const authorization = summary.querySelector(".authorization__btn");
         const insertionPoint = authorization?.parentElement === summary ? authorization : summary.lastElementChild;
+        summary.insertBefore(createUsageLink(definition), insertionPoint);
         summary.insertBefore(button, insertionPoint);
         summary.insertAdjacentElement("afterend", elements.panel);
+        if (shouldOpenFromLink) {
+            setOpen(true);
+            elements.panel.querySelector(".scenario-card")?.setAttribute("open", "");
+        }
     }
 
     function scanOperations() {

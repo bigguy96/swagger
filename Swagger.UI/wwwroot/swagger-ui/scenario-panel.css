@@ -14,6 +14,22 @@
     font-weight: 750;
 }
 
+.scenario-usage-link {
+    flex: 0 0 auto;
+    margin-left: .55rem;
+    color: #244f70;
+    font-size: .7rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.scenario-usage-link:hover { color: #1769aa; }
+
+.scenario-usage-link:focus-visible {
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+}
+
 .scenario-toggle {
     flex: 0 0 auto;
     min-height: 28px;
@@ -163,6 +179,8 @@
 .scenario-code-samples-heading + .scenario-example { margin-top: 0; }
 
 html:is([data-theme="dark"], .dark-mode) .scenario-code-samples-heading { color: #edf3f8; }
+html:is([data-theme="dark"], .dark-mode) .scenario-usage-link { color: #9acdf1; }
+html:is([data-theme="dark"], .dark-mode) .scenario-usage-link:hover { color: #d8efff; }
 
 .scenario-card-content dt { color: #3e5669; font-weight: 800; }
 .scenario-card-content dd { margin: 0; color: #263b4d; }
